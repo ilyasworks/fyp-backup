@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, email, Alert, setEmail, password, setPassword, View, Image, ImageBackground } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import auth from "@react-native-firebase/auth";
-
 import CreateAccount from './CreateAccount';
 import StackBusInfo from './GetBusInfo';
 import Location from './Location';
@@ -53,7 +52,7 @@ function HomeScreen({ navigation }) {
         setJwtoken(response.user.uid)
       }
     } catch (e) {
-      Alert.alert("Authentication Failed X ", " Please enter valid email/password")
+      Alert.alert("Authentication Failed ", " Please enter valid email/password")
     }
 
     if(jwToken) {
@@ -83,7 +82,6 @@ function HomeScreen({ navigation }) {
   }
   function getEmail(tex) {
     setUserCreds({ ...userCreds, identifier: tex })
-
   }
   function getPassword(pswd) {
     setUserCreds({ ...userCreds, password: pswd })
@@ -95,7 +93,8 @@ function HomeScreen({ navigation }) {
 
   return (
     <>
-     { authenticated ?
+     {
+      authenticated ?
         
         
        ( <View>
@@ -146,7 +145,8 @@ function HomeScreen({ navigation }) {
           </View>
 
         </View>
-      </ImageBackground>}
+      </ImageBackground>
+      }
     </>
   )
 }
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 80,
-    height: 100,
-    borderRadius:40
+    height: 80,
+
 
   },
   welcome_Note: {

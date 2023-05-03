@@ -5,6 +5,7 @@ import SettingsScreen from './settings';
 import Login from './Login';
 import Notifications from './Notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+// import Ionicons from 'react-native-vector-icons/MaterialIcons';
 
 
 const Tab = createBottomTabNavigator();
@@ -23,7 +24,7 @@ function App() {
         options={{
           tabBarIcon: ({focused})=>{
             return(
-              <Ionicons name = 'home-outline' size = {26} color = {'#0099FF'} /> 
+              <Ionicons name = 'home-outline' size = {30} color = {'#0099FF'} /> 
             )
           }
         }} />
@@ -31,7 +32,7 @@ function App() {
                 options={{
                   tabBarIcon: ({focused})=>{
                     return(
-                      <Ionicons name = 'settings-outline' size = {26} color = {'#0099FF'} /> 
+                      <Ionicons name = 'settings-outline' size = {30} color = {'#0099FF'} /> 
                     )
                   }
                 }} />
@@ -39,7 +40,7 @@ function App() {
                 options={{
                   tabBarIcon: ({focused})=>{
                     return(
-                      <Ionicons name = 'notifications-outline' size = {26} color = {'#0099FF'} /> 
+                      <Ionicons name = 'notifications-outline' size = {30} color = {'#0099FF'} /> 
                     )
                   }
                 }} />
