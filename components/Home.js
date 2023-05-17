@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './settings';
@@ -6,6 +6,7 @@ import Login from './Login';
 import Notifications from './Notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Ionicons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Tab = createBottomTabNavigator();
@@ -13,7 +14,25 @@ const Tab = createBottomTabNavigator();
 
 function App() {
 
+  const [jwToken, setJwtoken] = useState(null)
+  const [authenticated, setAuthenticated] = useState(false)
+
+  useEffect(() => {
+    if(jwToken) setAuthenticated(true)
+    else setAuthenticated(false)
+  },[])
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('jwtToken')
+      setJwtoken(value)
+
+    } catch(e) {
   
+    }
+  }
+
+  console.log({authenticated})
 
   return (
     <NavigationContainer >
@@ -36,7 +55,8 @@ function App() {
                     )
                   }
                 }} />
-        <Tab.Screen name="Notification" component={Notifications} 
+                
+        <Tab.Screen name="Notification" component={ Notifications } 
                 options={{
                   tabBarIcon: ({focused})=>{
                     return(

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, TextInput, email, TouchableOpacity } from 'react-native';
 import { Alert } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -18,27 +18,39 @@ const SucessAlertAdd = () => {
   };
 
 export default function Query() {
+    const [name, setName] = useState('');
+    const [registrationNumber, setRegistrationNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+
+    const clearInputs = () => {
+        setName('');
+        setRegistrationNumber('');
+        setEmail('');
+        setMessage('');
+    };
+
     return (
         <View style={styles.queryContiner}>
             <Text style={styles.NoteText}>Please let us know if you have any Queries </Text>
             <View>
                 <Text>Name*</Text>
                 <TextInput
-                    name="email"
+                    name="name"
                     style={styles.input}
                     placeholder="john"
-                // value={email}
-                // onChangeText={(txt) => getEmail(txt)}
+                    value={name}
+                    onChangeText={(txt) => setName(txt)}
                 />
             </View>
             <View>
-                <Text>registratrion Number*</Text>
+                <Text>Registration Number*</Text>
                 <TextInput
-                    name="email"
+                    name="registrationNumber"
                     style={styles.input}
                     placeholder="2019-uobs-203"
-                // value={email}
-                // onChangeText={(txt) => getEmail(txt)}
+                    value={registrationNumber}
+                    onChangeText={(txt) => setRegistrationNumber(txt)}
                 />
             </View>
             <View>
@@ -47,20 +59,23 @@ export default function Query() {
                     name="email"
                     style={styles.inputEmail}
                     placeholder="ilyasdev@gmail.com"
-                // value={email}
-                // onChangeText={(txt) => getEmail(txt)}
+                    value={email}
+                    onChangeText={(txt) => setEmail(txt)}
                 />
             </View>
             <View>
                 <Text>Message*</Text>
                 <TextInput
-                    name="email"
+                    name="message"
                     style={styles.inputMsg}
                     placeholder="your Query"
-                // value={email}
-                // onChangeText={(txt) => getEmail(txt)}
+                    value={message}
+                    onChangeText={(txt) => setMessage(txt)}
                 />
-                <TouchableOpacity style={styles.button} onPress={SucessAlertAdd}>
+                <TouchableOpacity style={styles.button} onPress={() => {
+                    SucessAlertAdd();
+                    clearInputs();
+                }}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </TouchableOpacity>
             </View>

@@ -2,8 +2,12 @@ import { useState } from "react";
 import { Text, View, Image, ImageBackground, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { setEmail, email, password, setPassword, CheckBox } from "react-native";
 import { Alert } from 'react-native';
-
+import { NavigationContainer} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack'; 
 import auth from "@react-native-firebase/auth";
+import Login from "./Login";
+
+const Stack = createStackNavigator();
 
 
 const SucessAlert = () => {
@@ -13,7 +17,7 @@ const SucessAlert = () => {
     [
       {
         text: 'OK',
-        onPress: () => console.log('OK pressed'),
+        onPress: () => navigation.navigate('Details'),
       },
     ],
     { cancelable: false }
@@ -21,7 +25,19 @@ const SucessAlert = () => {
 };
 
 
-export default function CreateAccount() {
+ function CreateAccount( { navigation } ) {
+
+      const [name, setName] = useState('');
+    const [registrationNumber, setRegistrationNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+
+    const clearInputs = () => {
+        setName('');
+        setRegistrationNumber('');
+        setEmail('');
+        setMessage('');
+    };
 
   const [userCredentials, setUsercredentials] = useState([])
 
@@ -40,6 +56,20 @@ export default function CreateAccount() {
       let response = await auth().createUserWithEmailAndPassword(userCredentials.email, userCredentials.password)
       if(response) {
         console.log("response ", response )
+
+        Alert.alert(
+          'Button Pressed',
+          'You have pressed the button!',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('login'),
+            },
+          ],
+          { cancelable: false }
+        );
+
+
       }
     } catch(error) { 
       console.error("Error : ", error.message) 
@@ -59,7 +89,7 @@ export default function CreateAccount() {
         <TextInput
           style={styles.input}
           placeholder="Muhammad Ilyas"
-          name="name"
+          name="name"  
           onChangeText={(txt) => handleChange(txt, "username")}
         />
         
@@ -99,6 +129,20 @@ export default function CreateAccount() {
     </ImageBackground>
   );
 }
+
+function StackLogin() {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false // hide the top title bar
+     }} >
+      <Stack.Screen name="createaccount" component={CreateAccount} />
+      <Stack.Screen name="login" component={Login}/>
+    </Stack.Navigator>
+  );
+}
+
+
+
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -155,3 +199,5 @@ const styles = StyleSheet.create({
     color: '#1e90ff'
   }
 });
+
+export default StackLogin;

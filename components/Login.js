@@ -5,6 +5,9 @@ import auth from "@react-native-firebase/auth";
 import CreateAccount from './CreateAccount';
 import StackBusInfo from './GetBusInfo';
 import Location from './Location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import HelloWorld from './LocationMap';
+
 
 const SucessAlert = () => {
   Alert.alert(
@@ -20,6 +23,7 @@ const SucessAlert = () => {
   );
 };
 
+
 const Stack = createStackNavigator();
 // async function  checkVech() {
 
@@ -34,14 +38,46 @@ const Stack = createStackNavigator();
 function HomeScreen({ navigation }) {
   const [busList, setBus] = useState([])
   const [userCreds, setUserCreds] = useState([])
-  const [jwToken, setJwtoken] = useState('')
+  const [jwToken, setJwtoken] = useState(null)
   const [authenticated, setAuthenticated] = useState(false)
-
+  
 
   const logout = () => {
 
 
   }
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('jwtToken', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  }
+  
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('jwtToken')
+      setJwtoken(value)
+
+    } catch(e) {
+  
+    }
+  }
+
+  const removeValue = async () => {
+    try {
+      await AsyncStorage.removeItem('jwtToken')
+      setJwtoken(false)
+    } catch(e) {
+      // remove error.
+      console.error("error while logging out ", {e})
+    }
+  
+    console.log('Done.')
+  }
+  
 
   const login = async () => {
     try {
@@ -49,24 +85,37 @@ function HomeScreen({ navigation }) {
       if (response && response.user) {
         Alert.alert("Success ✅", "Authenticated successfully")
         
-        setJwtoken(response.user.uid)
+        // deviceStorage.saveItem("jwtToken",response.user.uid)
+
+        // deviceStorage.loadJWT()
+        // setJwtoken(response.user.uid)
+        storeData(response.user.uid)
+
+        getData('jwtToken')
       }
     } catch (e) {
       Alert.alert("Authentication Failed ", " Please enter valid email/password")
     }
 
-    if(jwToken) {
+    if(jwToken != null || jwToken != '') {
       setAuthenticated(true)
     } else {
       setAuthenticated(false)
     }
   }
+
+  console.log({jwToken})
   const signOutUser = async () => {
     try {
       console.log("lougt")
       auth().signOut()
       .then(() =>console.log("loguout hogya"))
-        console.log(auth.getToken())
+
+      // deviceStorage.loadJWT();
+
+      removeValue()
+      setAuthenticated(false)
+
     } catch (e) {
         console.log(e);
     }
@@ -89,7 +138,7 @@ function HomeScreen({ navigation }) {
   }
 
   console.log("creds : ", userCreds);
-
+  console.log({authenticated})
 
   return (
     <>
@@ -102,8 +151,10 @@ function HomeScreen({ navigation }) {
           <TouchableOpacity style={styles.button}  onPress={signOutUser}>
             <Text style={styles.buttonText} >Logout</Text>
           </TouchableOpacity>
-          <StackBusInfo  />
-        </View> ) 
+          {/* <HelloWorld /> */}
+        </View>
+        
+        ) 
         :
 
       <ImageBackground
@@ -131,7 +182,8 @@ function HomeScreen({ navigation }) {
 
           />
           {/* navigation.navigate('Details') */}
-          <TouchableOpacity style={styles.button} onPress={login}>
+          <TouchableOpacity style={styles.button} onPress={login} >
+          {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Details')} > */}
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View>
@@ -153,12 +205,15 @@ function HomeScreen({ navigation }) {
 
 function Login() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: 'transparent'
-        }
-      }}>
+    // <Stack.Navigator
+    //   screenOptions={{
+    //     headerStyle: {
+    //       backgroundColor: 'transparent'
+    //     }
+    //   }}>
+    <Stack.Navigator screenOptions={{
+      headerShown: false // hide the top title bar
+     }} >
       <Stack.Screen name="Homescreen" component={HomeScreen} />
       <Stack.Screen name="Details" component={StackBusInfo} />
       <Stack.Screen name="Create_Account" component={CreateAccount} />

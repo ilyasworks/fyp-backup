@@ -1,34 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, Image, View, ScrollView, SafeAreaView } from 'react-native';
 import { WebView } from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Notification = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [jwToken, setJwtoken] = useState(null)
+  const [authenticated, setAuthenticated] = useState(false)
 
   useEffect(() => {
-    // Simulate loading data
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 4000);
-  }, []);
+    (async() => {
+      getData('jwtToken')
+    })()
+    if (jwToken) {
+      console.log({ jwToken })
+      setAuthenticated(true)
+    } else {
+      console.log("not authneticated")
+      setAuthenticated(false)
+    }
+  }, [])
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('jwtToken')
+      setJwtoken(value)
+
+    } catch (e) {
+
+    }
+  }
+
+  console.log({ jwToken })
+  console.log({ authenticated })
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {
-        isLoading ?
-          // <Text style={styles.loading}>loading....</Text>
-          <Image style={styles.gif} source={require('../assets/loading.gif')} />
-          :
-          <WebView
-            // source={{uri: 'https://www.sinotrack.com/'}}
-            source={{ uri: 'https://uobs.edu.pk/' }}
-            style={styles.webview}
-            allowsFullscreenVideo={true}
-            allowsInlineMediaPlayback={true}
-          />
+
+        authenticated ? (
+          <View style={styles.button_create_account}>
+            <Text style={styles.buttonText}>You can view this page</Text>
+          </View>
+        ) : (
+          <View style={styles.button_create_account}>
+            <Text style={styles.buttonText}>Login first to get into this page</Text>
+          </View>
+        )
       }
 
-    </SafeAreaView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
