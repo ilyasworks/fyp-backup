@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, email, Alert, setEmail, password, setPassword, View, Image, ImageBackground } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from "@react-native-firebase/auth";
+import { createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
+import { PermissionsAndroid, Platform, Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, email, password } from 'react-native';
 import CreateAccount from './CreateAccount';
 import StackBusInfo from './GetBusInfo';
-import Location from './Location';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import HelloWorld from './LocationMap';
+import { getBusLocations, getCurrentLocation, updateCurrentLocation } from './utils/saveLocation';
+import firebase from '../database/firebase';
 
 
 const SucessAlert = () => {
@@ -137,8 +137,29 @@ function HomeScreen({ navigation }) {
 
   }
 
-  console.log("creds : ", userCreds);
-  console.log({authenticated})
+  useEffect(() => {
+    // Request location permission
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+        .then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            updateCurrentLocation();
+          }
+        })
+        .catch(error => console.log('Error requesting location permission:', error));
+    }
+    //  else {
+    //   updateCurrentLocation();
+    // }
+
+  const unsubscribe = getBusLocations();
+
+    return () => {
+      // Unsubscribe from the snapshot listener when the component unmounts
+      unsubscribe();
+    };
+  }, []);
+
 
   return (
     <>
@@ -182,8 +203,8 @@ function HomeScreen({ navigation }) {
 
           />
           {/* navigation.navigate('Details') */}
-          <TouchableOpacity style={styles.button} onPress={login} >
-          {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Details')} > */}
+          {/* <TouchableOpacity style={styles.button} onPress={login} > */}
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Details')} >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View>

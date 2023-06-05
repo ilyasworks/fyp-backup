@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text,Image, ImageBackground, TouchableOpacity,Button, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Location from './Location';
+import DeviceTracker from './deviceTracker';
+import StartBus from './StartBus';
 
 
 const Stack = createStackNavigator();
@@ -17,7 +19,15 @@ function Businfo({ navigation }) {
         <Text style={styles.EnableText}>Enable your Location</Text>
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('location')}>
-          <Text style={styles.buttonText}>Bus Info</Text>
+          <Text style={styles.buttonText}>Server 1</Text>
+        </TouchableOpacity>  
+        <Text>  {'\n'} </Text> 
+        <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('trackerDevice')}>
+          <Text style={styles.buttonText}>Server 2</Text>
+        </TouchableOpacity>   
+        <Text>  {'\n'} </Text> 
+        <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('startbus')}>
+          <Text style={styles.buttonText}>start BUS</Text>
         </TouchableOpacity>   
     </View>
     </ImageBackground>
@@ -32,6 +42,8 @@ function StackBusInfo() {
      }} >
       <Stack.Screen name="GetBusInfo" component={Businfo} />
       <Stack.Screen name="location" component={Location} />
+      <Stack.Screen name="trackerDevice" component={DeviceTracker} />
+      <Stack.Screen name="startbus" component={StartBus} />
     </Stack.Navigator>
   );
 }
@@ -73,6 +85,14 @@ const styles = StyleSheet.create({
     // backgroundColor: '#f2f2f2',
   },
   button: {
+    width: '80%',
+    height: 50,
+    backgroundColor: '#1e90ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  button2: {
     width: '80%',
     height: 50,
     backgroundColor: '#1e90ff',

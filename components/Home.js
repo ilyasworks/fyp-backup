@@ -7,6 +7,7 @@ import Notifications from './Notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Ionicons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UobsWeb from './uobsWeb';
 
 
 const Tab = createBottomTabNavigator();
@@ -56,7 +57,7 @@ function App() {
                   }
                 }} />
                 
-        <Tab.Screen name="Notification" component={ Notifications } 
+        <Tab.Screen name="Notification" component={ UobsWeb } 
                 options={{
                   tabBarIcon: ({focused})=>{
                     return(

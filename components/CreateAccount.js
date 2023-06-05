@@ -58,8 +58,8 @@ const SucessAlert = () => {
         console.log("response ", response )
 
         Alert.alert(
-          'Button Pressed',
-          'You have pressed the button!',
+          'Success',
+          'your account Successfuly Created',
           [
             {
               text: 'OK',
